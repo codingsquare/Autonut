@@ -51,3 +51,10 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = '1.8'
 }
+
+jar {
+    manifest {
+        attributes 'Title': 'Autonut', 'Version': version, 'Main-Class': 'io.github.codingsquare.autonut.AutonutMainKt'
+    }
+    from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+}
