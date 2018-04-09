@@ -21,3 +21,15 @@ class ConsoleHighlighter : ForegroundCompositeConverterBase<ILoggingEvent>() {
             else -> ANSIConstants.WHITE_FG
         }
 }
+
+fun main(args: Array<String>) {
+    val numbers = (readLine()!!.toInt() *
+            readLine()!!.toInt() *
+            readLine()!!.toInt())
+        .toString().map { it.toInt() }
+    print(numbers)
+
+    for(i in 0..10) {
+        println(numbers.filter { it == i }.size)
+    }
+}
