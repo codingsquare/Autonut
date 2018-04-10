@@ -1,6 +1,7 @@
 package io.github.codingsquare.autonut.impl.telegram.bot
 
 import com.mashape.unirest.http.Unirest
+import com.mashape.unirest.request.HttpRequestWithBody
 import io.github.codingsquare.autonut.Autonut
 import io.github.codingsquare.autonut.core.Platform
 import io.github.codingsquare.autonut.core.event.MessageReceiveEvent
@@ -9,13 +10,12 @@ import io.github.codingsquare.autonut.util.logger
 import kotlin.concurrent.thread
 
 object TelegramBotPlatform : Platform {
-
     override val name = "Telegram Bot"
 
     data class Update(val message: TelegramMessage, val id: Long)
 
     private fun getUpdates(offset: Long): List<Update> {
-        val jsonObject = Unirest.post("https://api.telegram.org/bot${Autonut.TELEGRAM_BOT_TOKEN}/getUpdates")
+        val jsonObject = request("getUpdates")
             .field("offset", offset).asJson().body.`object`
         if (!jsonObject.getBoolean("ok")) {
             logger().debug("Update not received. is it ok?")
@@ -23,16 +23,26 @@ object TelegramBotPlatform : Platform {
         val result = jsonObject.getJSONArray("result")
         return (0 until result.length()).map {
             val update = result.getJSONObject(it)
-            Update(TelegramMessage(update.getJSONObject("message")), update.getLong("update_id"))
+            Update(
+                TelegramMessage(
+                    update.getJSONObject(
+                        "message"
+                    )
+                ), update.getLong("update_id")
+            )
         }
     }
+
+    fun request(method: String): HttpRequestWithBody =
+        Unirest.post("https://api.telegram.org/bot${Autonut.TELEGRAM_BOT_TOKEN}/$method")
 
     override fun start() {
         thread(name = "TelegramBot-LongPolling", isDaemon = true) {
             var offset: Long = 0
             while (true) {
                 try {
-                    val updates = getUpdates(offset + 1)
+                    val updates =
+                        getUpdates(offset + 1)
                     if (!updates.isEmpty()) {
                         logger().debug("${updates.size} updates received")
                         for (update in updates) {
