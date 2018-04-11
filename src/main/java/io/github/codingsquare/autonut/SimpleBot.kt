@@ -43,7 +43,7 @@ object SimpleBot {
                 }
                 "/봇 정보" -> {
                     // todo: select version
-                    channel.sendMarkdown(updateLogs.last().run { "**현재 버전 : $version**\n```$description```" })
+                    channel.sendMarkdown(updateLogs.last().run { "**현재 버전 : $version**\n```\n$description\n```" })
                 }
                 else -> {
                     // do nothing

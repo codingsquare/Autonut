@@ -14,24 +14,28 @@ fun Any.toJson(): JsonElement = GSON.toJson(this).parseJson()
 
 inline fun <reified T : Any> JsonElement.byClass(
     key: String? = null,
-    noinline default: (() -> T)? = null
+    noinline default: (() -> T)? = null,
+    noinline getter: (JsonElement) -> T = { GSON.fromJson(it) },
+    noinline setter: (T) -> JsonElement = { it.toJson() }
 ): JsonObjectDelegate<T> =
     JsonObjectDelegate(
         this.obj,
-        { GSON.fromJson(it) },
-        { it.toJson() },
+        getter,
+        setter,
         key,
         default
     )
 
 inline fun <reified T : Any> JsonElement.byNullableClass(
     key: String? = null,
-    noinline default: (() -> T)? = null
+    noinline default: (() -> T)? = null,
+    noinline getter: (JsonElement) -> T = { GSON.fromJson(it) },
+    noinline setter: (T?) -> JsonElement? = { it?.toJson() }
 ): NullableJsonObjectDelegate<T?> =
     NullableJsonObjectDelegate(
         this.obj,
-        { GSON.fromJson(it) },
-        { it?.toJson() ?: jsonNull },
+        getter,
+        { setter(it) ?: jsonNull },
         key,
         default
     )
