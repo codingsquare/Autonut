@@ -1,5 +1,9 @@
 # Autonut
+[![Build Status](https://img.shields.io/travis/codingsquare/Autonut.svg)](https://travis-ci.org/codingsquare/Autonut)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcodingsquare%2FAutonut.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcodingsquare%2FAutonut?ref=badge_shield)
+[![license](https://img.shields.io/github/license/codingsquare/Autonut.svg)](https://github.com/codingsquare/Autonut/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/codingsquare/Autonut.svg)](https://github.com/codingsquare/Autonut/releases)
+![works on my machine](https://img.shields.io/badge/works%20on-my%20machine-brightgreen.svg)
 
 Autonut: Automated donut
 
