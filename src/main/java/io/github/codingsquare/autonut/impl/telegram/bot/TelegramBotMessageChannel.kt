@@ -1,5 +1,9 @@
 package io.github.codingsquare.autonut.impl.telegram.bot
 
+import com.github.kittinunf.result.getOrElse
+import com.github.kittinunf.result.map
+import com.github.salomonbrys.kotson.bool
+import com.github.salomonbrys.kotson.get
 import io.github.codingsquare.autonut.core.entity.MessageChannel
 
 interface TelegramBotMessageChannel : MessageChannel {
@@ -15,6 +19,11 @@ interface TelegramBotMessageChannel : MessageChannel {
         return sendMessage(message, ParseMode.UNSET)
     }
 
+    override fun sendMarkdown(message: String): Boolean {
+        return sendMessage(message, ParseMode.MARKDOWN)
+    }
+
+
     fun sendMessage(
         message: String,
         parseMode: ParseMode = ParseMode.UNSET,
@@ -22,15 +31,16 @@ interface TelegramBotMessageChannel : MessageChannel {
         notify: Boolean = true,
         replyTo: Long? = null
     ): Boolean {
-        return TelegramBotPlatform.request("sendMessage").field("chat_id", id).field("text", message)
-            .also {
-                if (parseMode !== ParseMode.UNSET) {
-                    it.field("parse_mode", parseMode.value)
-                }
-            }.field("disable_web_page_preview", !webPagePreview).field("disable_notification", !notify).also {
-                if (replyTo !== null) {
-                    it.field("reply_to_message_id", replyTo)
-                }
-            }.asJson().body.`object`.getBoolean("ok")
+        return TelegramBotPlatform.request(
+            "sendMessage",
+            listOf(
+                "chat_id" to id,
+                "text" to message,
+                "parse_mode" to parseMode.value,
+                "disable_web_page_preview" to !webPagePreview,
+                "disable_notification" to !notify,
+                "reply_to_message_id" to replyTo
+            )
+        ).map { it["ok"].bool == true }.getOrElse(false)
     }
 }
