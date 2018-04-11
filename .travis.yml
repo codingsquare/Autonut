@@ -2,13 +2,21 @@ language: java
 sudo: false
 install: true
 jdk:
-  - oraclejdk8
+- oraclejdk8
 before_install:
-  - chmod +x gradlew
+- chmod +x gradlew
 dist: trusty
 cache:
   directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
-    - '$HOME/.gradle'
-    - '.gradle'
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+  - "$HOME/.gradle"
+  - ".gradle"
+deploy:
+  provider: releases
+  api_key:
+    secure: Eb1/9fz8ARU1gFpkEG4YE0c+u607sYMvvm2i7W0FGuqEcj8D//ZdpTLuoo4eznHMdbA42nri5js726L8b2Wx3xJ6VZkQ/0d3UwlyS03u4r5KBWOc5XKmdBRARg3JdtQ8f9tbLnsmjviN2Kxsf2ph3qUn+HA8EuLQrRYiNSC1xBlldk9a1J8hFFOogu3ype4i2Mnym4AMZPLOmJd5JrdqUN7VrLN9mFxw7i/uBEAZpLlApkJT3K+cSyu5RdtrMJl+J2EQsfbK6PoTB3hXRnVgX2YILd4HfZ24QbeVfl/fAwRchIqw4UgHqaKJmvHMnnm1bcNBqUoRUg2jGbUmyyv1IERrXX3w/kNNUkwX1jmU6UQlpCgK1C2Ftx1fQ+vPTj9XHZ8K4ICL5TX+p2owqWVJ+TU2eXhaXI3U6rpz76tju19TnN6+tAaxwRwbVnGaCI7yCen3LEJr3hvE891i6D8zneQFDXsb4D71K3Zl/lmWiR/siWUt+zE3kzRaVfXlihy8J6VxxMKdmrrKE3L0pcBtepKVB3FJXO6KNGllXhDdTTpUBRfpnxBQWwL/ZnHv9k3b+r1kwg46GEYo/srz1NOW5GLSMbyF73X3dxwL2XeATjTOnym+YAGS4RpatlMHA2HxvYw7iD5uW3aHHnBws49uNbHMJFgu93nrIuF5rsyaPYQ=
+  file: build/libs/Autonut.jar
+  on:
+    repo: codingsquare/Autonut
+    tags: true
